@@ -39,6 +39,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "postinstall": "npm rebuild better-sqlite3 || true",
     "prepublishOnly": "npm run build && find .next -name '*.map' -delete"
   },
   "dependencies": {
