@@ -1,6 +1,6 @@
 {
   "name": "cursor-local-remote",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "type": "module",
   "description": "Control Cursor IDE from any device on your local network",
   "license": "MIT",
