@@ -41,6 +41,14 @@ A QR code pops up in your terminal — scan it from your phone and you're connec
 - **Live tail** — watch an active desktop session update in real time
 - **Resume sessions** — continue any past session from the web UI
 - **Stop / retry / copy** — cancel a running response, retry, or copy any message
+- **Install as app** — PWA support, add to home screen on iOS/Android for a native feel
+- **Push notifications** — get notified when the agent finishes while the tab is in the background
+- **Settings** — toggle workspace trust, notifications, and sound from the UI
+- **Haptic feedback** — tactile feedback on mobile devices
+- **Sound effects** — audio cues on completion and errors
+- **Multi-tab sessions** — work with multiple chat sessions side by side
+- **Share via QR** — in-app QR code to quickly connect another device
+- **Auto-port** — if the default port is busy, the CLI finds the next available one
 
 ## Usage
 
@@ -77,13 +85,11 @@ The CLI starts a pre-built Next.js server on your machine. When you send a promp
 
 ### Authentication
 
-Every launch generates a random token printed in the terminal. Access is granted by:
+Every launch generates a memorable word-pair token (e.g. `alpine-berry`) printed in the terminal. You can set a fixed token via the `AUTH_TOKEN` env var. Access is granted by:
 
 1. Scanning the QR code (encodes the network URL with the token)
 2. Visiting the URL with `?token=<token>` (sets an `httpOnly` cookie for 7 days)
 3. Passing `Authorization: Bearer <token>` for API calls
-
-You can also set a fixed token via the `AUTH_TOKEN` env var.
 
 ### API
 
@@ -91,10 +97,20 @@ All endpoints require a valid token (cookie or `Bearer` header).
 
 | Endpoint | Method | Description |
 | --- | --- | --- |
-| `/api/chat` | `POST` | Send a prompt. Returns an NDJSON stream of agent events (`system`, `user`, `assistant`, `tool_call`, `result`). Body: `{ prompt, sessionId?, model?, mode? }` |
+| `/api/chat` | `POST` | Send a prompt. Returns an NDJSON stream of agent events. Body: `{ prompt, sessionId?, model?, mode? }` |
 | `/api/models` | `GET` | List available models from `agent models` (cached 5 min) |
-| `/api/sessions/history` | `GET` | Session list or full transcript. `?id=<sessionId>` for messages + tool calls |
-| `/api/sessions/watch` | `GET` | SSE stream for live session updates. `?id=<sessionId>` — pushes `update` events on file change |
+| `/api/sessions` | `GET` | Session list (merged Cursor + CLR sessions). `?all=true` for all workspaces |
+| `/api/sessions` | `DELETE` | Delete a stored session. Body: `{ sessionId }` |
+| `/api/sessions/active` | `GET` | List currently running agent session IDs |
+| `/api/sessions/active` | `DELETE` | Kill a running agent process. Body: `{ sessionId }` |
+| `/api/sessions/history` | `GET` | Full transcript for a session. `?id=<sessionId>` |
+| `/api/sessions/watch` | `GET` | SSE stream for live session updates. `?id=<sessionId>` |
+| `/api/settings` | `GET` | Get current settings (trust, notifications, sound) |
+| `/api/settings` | `PATCH` | Update settings. Body: `{ trust?, notifications?, sound? }` (booleans) |
+| `/api/info` | `GET` | Network info, auth URL, and workspace path |
+| `/api/push/vapid-key` | `GET` | VAPID public key for push notification subscription |
+| `/api/push/subscribe` | `POST` | Register a push subscription. Body: standard `PushSubscription` JSON |
+| `/api/push/subscribe` | `DELETE` | Remove a push subscription. Body: `{ endpoint }` |
 
 ### Environment variables
 
