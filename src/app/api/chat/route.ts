@@ -104,7 +104,7 @@ export async function POST(req: Request) {
     });
 
     if (verbose) {
-      console.log(`[chat] spawning agent in ${workspace} (model=${body.model ?? "default"}, mode=${body.mode ?? "agent"})`);
+      console.warn(`[chat] spawning agent in ${workspace} (model=${body.model ?? "default"}, mode=${body.mode ?? "agent"})`);
     }
 
     const sessionId = await waitForSessionId(child, workspace, body.prompt, requestId);
@@ -116,7 +116,7 @@ export async function POST(req: Request) {
     }
 
     if (verbose) {
-      console.log(`[chat] agent started session ${sessionId}`);
+      console.warn(`[chat] agent started session ${sessionId}`);
     }
 
     return Response.json({ sessionId });

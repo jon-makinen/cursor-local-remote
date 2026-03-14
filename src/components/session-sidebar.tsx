@@ -157,8 +157,12 @@ export function SessionSidebar({
   const haptics = useHaptics();
 
   useEffect(() => {
-    setSelectedProject(localStorage.getItem(PROJECT_STORAGE_KEY));
-    setStarred(loadStarred());
+    const stored = localStorage.getItem(PROJECT_STORAGE_KEY);
+    const stars = loadStarred();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hydration: client-only localStorage read
+    setSelectedProject(stored);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hydration: client-only localStorage read
+    setStarred(stars);
   }, []);
 
   const toggleStar = useCallback((e: React.MouseEvent, path: string) => {

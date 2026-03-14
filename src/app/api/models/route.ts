@@ -44,7 +44,7 @@ export async function GET() {
 
   try {
     if (process.env.CLR_VERBOSE === "1") {
-      console.log(`[models] fetching (timeout=${MODELS_FETCH_TIMEOUT_MS}ms)`);
+      console.warn(`[models] fetching (timeout=${MODELS_FETCH_TIMEOUT_MS}ms)`);
     }
 
     const agentArgs = ["models"];
