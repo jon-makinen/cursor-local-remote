@@ -15,8 +15,7 @@ interface TerminalProcess {
 }
 
 declare global {
-  // eslint-disable-next-line no-var
-  var __terminalRegistry: Map<string, TerminalProcess> | undefined;
+  var __terminalRegistry: Map<string, TerminalProcess> | undefined; // eslint-disable-line no-var
 }
 
 const terminals = globalThis.__terminalRegistry ?? (globalThis.__terminalRegistry = new Map<string, TerminalProcess>());
@@ -28,7 +27,7 @@ function cleanEnv(): NodeJS.ProcessEnv {
   const base = { ...process.env };
   for (const key of Object.keys(base)) {
     if (ENV_BLOCKLIST.has(key) || ENV_PREFIX_BLOCKLIST.some((p) => key.startsWith(p))) {
-      delete base[key];
+      Reflect.deleteProperty(base, key);
     }
   }
   base.TERM = "xterm-256color";

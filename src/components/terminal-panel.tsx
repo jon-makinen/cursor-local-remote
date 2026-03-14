@@ -375,8 +375,8 @@ export function TerminalPanel({ open, onClose, workspace, onCountChange }: Termi
                 <span
                   role="button"
                   tabIndex={0}
-                  onClick={(e) => { e.stopPropagation(); t.running ? handleKill(t.id) : handleRemove(t.id); }}
-                  onKeyDown={(e) => { if (e.key === "Enter") { e.stopPropagation(); t.running ? handleKill(t.id) : handleRemove(t.id); } }}
+                  onClick={(e) => { e.stopPropagation(); if (t.running) handleKill(t.id); else handleRemove(t.id); }}
+                  onKeyDown={(e) => { if (e.key === "Enter") { e.stopPropagation(); if (t.running) handleKill(t.id); else handleRemove(t.id); } }}
                   className="shrink-0 ml-0.5 p-1 rounded opacity-40 hover:opacity-100 active:opacity-100 hover:bg-bg-active transition-opacity"
                 >
                   <CloseIcon size={9} />
