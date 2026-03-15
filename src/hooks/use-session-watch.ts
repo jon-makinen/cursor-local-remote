@@ -42,8 +42,14 @@ export function useSessionWatch(options: UseSessionWatchOptions = {}) {
   const mergeMessages = useCallback((incoming: ChatMessage[]) => {
     setMessages((prev) => {
       const incomingIds = new Set(incoming.map((m) => m.id));
+      const incomingUserTexts = new Set(
+        incoming.filter((m) => m.role === "user").map((m) => m.content.trim()),
+      );
       const optimistic = prev.filter(
-        (m) => m.role === "user" && !incomingIds.has(m.id),
+        (m) =>
+          m.role === "user" &&
+          !incomingIds.has(m.id) &&
+          !incomingUserTexts.has(m.content.trim()),
       );
       if (optimistic.length === 0) return incoming;
       return [...incoming, ...optimistic];
