@@ -1,9 +1,10 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
+import { normalizeMarkdown } from "@/lib/markdown-normalize";
 import "highlight.js/styles/github-dark.css";
 
 interface MarkdownProps {
@@ -66,17 +67,20 @@ const components: Components = {
     </blockquote>
   ),
   table: ({ children }) => (
-    <div className="my-2 overflow-x-auto">
+    <div className="my-3 overflow-x-auto rounded-lg border border-border">
       <table className="min-w-full text-[13px] border-collapse">{children}</table>
     </div>
   ),
+  thead: ({ children }) => <thead className="bg-bg-surface">{children}</thead>,
+  tbody: ({ children }) => <tbody className="divide-y divide-border/50">{children}</tbody>,
+  tr: ({ children }) => <tr className="align-top">{children}</tr>,
   th: ({ children }) => (
-    <th className="px-3 py-1.5 text-left font-semibold border-b border-border text-text">
+    <th className="px-3 py-2 text-left font-semibold border-b border-border text-text whitespace-nowrap">
       {children}
     </th>
   ),
   td: ({ children }) => (
-    <td className="px-3 py-1.5 border-b border-border/50">{children}</td>
+    <td className="px-3 py-2 text-[13px] leading-[1.5] border-b border-border/40">{children}</td>
   ),
   img: ({ src, alt }) => (
     // eslint-disable-next-line @next/next/no-img-element
@@ -85,10 +89,12 @@ const components: Components = {
 };
 
 export const Markdown = memo(function Markdown({ content }: MarkdownProps) {
+  const normalized = useMemo(() => normalizeMarkdown(content), [content]);
+
   return (
-    <div className="text-text">
+    <div className="text-text markdown-body">
       <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]} components={components}>
-        {content}
+        {normalized}
       </ReactMarkdown>
     </div>
   );
