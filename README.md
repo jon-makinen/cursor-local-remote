@@ -1,3 +1,5 @@
+Edit: Due to Cursor pricing changes, I have moved to Claude Code (that already has this feature). I will no longer be maintaining the project and recommend you fork it and make changes if needed.
+
 # Cursor Local Remote
 
 Control Cursor from your phone, tablet or any browser on your local network. Great for monitoring and nudging Cursor while in the bathroom, watching a movie or cooking food.
