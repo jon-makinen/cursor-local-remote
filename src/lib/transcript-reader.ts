@@ -3,6 +3,7 @@ import { join, resolve, sep } from "path";
 import { homedir } from "os";
 import { existsSync, statSync } from "fs";
 import type { StoredSession, ChatMessage, ToolCallInfo, TodoItem, ProjectInfo } from "@/lib/types";
+import { joinMessageContent } from "@/lib/markdown-normalize";
 import { vlog } from "@/lib/verbose";
 
 const CURSOR_PROJECTS_DIR = join(homedir(), ".cursor", "projects");
@@ -334,7 +335,7 @@ export function parseLiveEvents(
     if (text.trim()) {
       const prev = messages[messages.length - 1];
       if (prev && prev.role === role) {
-        prev.content += text;
+        prev.content = joinMessageContent(prev.content, text);
       } else {
         messages.push({
           id: `${sessionId}-live-${counter.n++}`,
@@ -406,7 +407,7 @@ export async function readSessionMessages(workspace: string, sessionId: string):
     if (text.trim()) {
       const prev = messages[messages.length - 1];
       if (prev && prev.role === role) {
-        prev.content += text;
+        prev.content = joinMessageContent(prev.content, text);
       } else {
         messages.push({
           id: `${sessionId}-${counter.n++}`,
